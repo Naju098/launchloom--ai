@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════
+   LAUNCHLOOM — NEON CASINO THEME
+   Dark purple base · Neon magenta accent · Cyan secondary
+   Inspired by Casino Bet — Telegram Gaming Experience
+   ═══════════════════════════════════════════ */
+
+:root {
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: #FFFFFF;
+  background: #0B0A12;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  /* ── Neon Casino Design Tokens ── */
+  --loom-plum: #FFFFFF;
+  --loom-muted: #A5A3C4;
+  --loom-accent: #E9407F;
+  --loom-accent-hover: #D62D6F;
+  --loom-lilac: #A5A3C4;
+  --loom-rose: #E9407F;
+  --loom-blush: #16142B;
+  --loom-pink: #1F1D3E;
+  --loom-surface: #0B0A12;
+  --loom-border: rgba(255, 255, 255, 0.06);
+  --loom-border-hover: rgba(255, 255, 255, 0.10);
+  --loom-shadow: rgba(0, 0, 0, 0.35);
+
+  /* ── Backwards-compatible --va-* mapping ── */
+  --va-base: #0B0A12;
+  --va-panel: #16142B;
+  --va-elevated: #1F1D3E;
+  --va-border: rgba(255, 255, 255, 0.06);
+  --va-border-hover: rgba(255, 255, 255, 0.10);
+  --va-text: #FFFFFF;
+  --va-text-secondary: #A5A3C4;
+  --va-text-muted: #5C5A7A;
+
+  /* Primary accent — neon magenta */
+  --va-magenta: #E9407F;
+  --va-magenta-dim: rgba(233, 64, 127, 0.15);
+  --va-orange: #E9407F;
+  --va-orange-dim: rgba(233, 64, 127, 0.15);
+  --va-green: #E9407F;
+  --va-green-dim: rgba(233, 64, 127, 0.15);
+
+  /* Secondary accents */
+  --va-teal: #06B6D4;       /* electric cyan */
+  --va-amber: #F59E0B;      /* gold */
+  --va-coral: #7C3AED;      /* deep violet */
+  --va-violet: #A855F7;     /* lighter violet */
+
+  /* Surfaces */
+  --va-card: #16142B;
+  --va-card-hover: #1F1D3E;
+  --va-input: #16142B;
+  --va-input-border: rgba(255, 255, 255, 0.10);
+  --va-input-focus: rgba(233, 64, 127, 0.25);
+
+  /* Glows */
+  --va-glow-magenta: rgba(233, 64, 127, 0.10);
+  --va-glow-teal: rgba(6, 182, 212, 0.08);
+  --va-glow-amber: rgba(245, 158, 11, 0.06);
+}
+
+/* ── Focus Mode (reduced intensity) ── */
+[data-theme="focus"] {
+  --va-panel: #12112A;
+  --va-elevated: #1A1938;
+  --va-green-dim: rgba(233, 64, 127, 0.08);
+  --va-glow-magenta: rgba(233, 64, 127, 0.05);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--va-base);
+  color: var(--va-text);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  color: var(--va-text);
+  background: var(--va-magenta);
+}
+
+/* ── Subtle grain texture ── */
+.bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+/* ── Dark card ── */
+.venture-card {
+  background: var(--va-card);
+  border: 1px solid var(--va-border);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.venture-card:hover {
+  border-color: var(--va-border-hover);
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Elevated panel ── */
+.venture-panel {
+  background: var(--va-elevated);
+  border: 1px solid var(--va-border);
+}
+
+/* ── Scrollbar styling ── */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ── 3D utilities ── */
+.preserve-3d { transform-style: preserve-3d; }
+.perspective-1000 { perspective: 1000px; }
+.backface-hidden { backface-visibility: hidden; }
+
+/* ── Animations ── */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ── Gradient ── */
+.bg-venture-radial {
+  background: radial-gradient(ellipse at 50% 0%, rgba(233, 64, 127, 0.08) 0%, transparent 60%);
+}
+
+/* ── Input styling ── */
+.venture-input {
+  background: var(--va-input);
+  border: 1px solid var(--va-input-border);
+  color: var(--va-text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.venture-input:focus {
+  border-color: var(--va-magenta);
+  box-shadow: 0 0 0 3px var(--va-input-focus);
+}
+
+.venture-input::placeholder {
+  color: var(--va-text-muted);
+}
