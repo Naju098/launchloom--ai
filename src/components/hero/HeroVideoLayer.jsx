@@ -5,12 +5,17 @@ import DribbbleAnimation from "./DribbbleAnimation";
 /**
  * HeroVideoLayer — Plays the Flow-generated video as the primary hero visual.
  *
- * - The video at /videos/launchloom-hero-loop.mp4 contains a realistic moving
+ * - Uses import.meta.env.BASE_URL so the path works on both dev and GitHub Pages.
  *   laptop with floating interface cards and animated connection lines.
  * - While the video loads, DribbbleAnimation renders as a seamless fallback.
  * - Once the video can play, DribbbleAnimation fades out and the video fades in.
  * - Respects prefers-reduced-motion.
  */
+/* ── Dynamic base-aware video path ──
+   Uses Vite's BASE_URL so the video works on both
+   localhost (/) and GitHub Pages (/launchloom--ai/). */
+const videoSrc = `${import.meta.env.BASE_URL}videos/launchloom-hero-loop.mp4`;
+
 export default function HeroVideoLayer({ className = "" }) {
   const prefersReducedMotion = useReducedMotion();
   const videoRef = useRef(null);
@@ -29,7 +34,7 @@ export default function HeroVideoLayer({ className = "" }) {
     setShowFallback(true); // Keep fallback visible on error
     console.warn(
       "[HeroVideoLayer] Video failed to load. " +
-        "Ensure /videos/launchloom-hero-loop.mp4 exists. " +
+        `Ensure ${videoSrc} exists. ` +
         "Keeping CSS animation fallback."
     );
   }, []);
@@ -76,7 +81,7 @@ export default function HeroVideoLayer({ className = "" }) {
           onError={handleError}
           aria-hidden="true"
         >
-          <source src="/videos/launchloom-hero-loop.mp4" type="video/mp4" />
+          <source src={videoSrc} type="video/mp4" />
         </video>
       </motion.div>
 
