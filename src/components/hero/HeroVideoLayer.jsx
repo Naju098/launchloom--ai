@@ -1,92 +1,50 @@
-import { useState, useRef, useCallback, useEffect } from "react";
-import { motion, useReducedMotion } from "motion/react";
-import DribbbleAnimation from "./DribbbleAnimation";
+import { useRef, useState, useCallback } from "react";
 
 /**
- * HeroVideoLayer — Plays the Flow-generated video as the primary hero visual.
+ * HeroVideoLayer — Plays ONLY the Flow-generated hero video.
  *
- * - Uses import.meta.env.BASE_URL so the path works on both dev and GitHub Pages.
- *   laptop with floating interface cards and animated connection lines.
- * - While the video loads, DribbbleAnimation renders as a seamless fallback.
- * - Once the video can play, DribbbleAnimation fades out and the video fades in.
- * - Respects prefers-reduced-motion.
+ * No DribbbleAnimation — that lives only in LivePreviewSection below.
+ * Uses import.meta.env.BASE_URL so the path works on both
+ * localhost (/) and GitHub Pages (/launchloom--ai/).
  */
-/* ── Dynamic base-aware video path ──
-   Uses Vite's BASE_URL so the video works on both
-   localhost (/) and GitHub Pages (/launchloom--ai/). */
 const videoSrc = `${import.meta.env.BASE_URL}videos/launchloom-hero-loop.mp4`;
 
 export default function HeroVideoLayer({ className = "" }) {
-  const prefersReducedMotion = useReducedMotion();
-  const videoRef = useRef(null);
-  const [videoReady, setVideoReady] = useState(false);
-  const [videoError, setVideoError] = useState(false);
-  const [showFallback, setShowFallback] = useState(true);
+  const [loaded, setLoaded] = useState(false);
 
-  const handleCanPlay = useCallback(() => {
-    setVideoReady(true);
-    // Brief delay to let the video render its first frame, then fade out fallback
-    setTimeout(() => setShowFallback(false), 400);
-  }, []);
-
-  const handleError = useCallback(() => {
-    setVideoError(true);
-    setShowFallback(true); // Keep fallback visible on error
-    console.warn(
-      "[HeroVideoLayer] Video failed to load. " +
-        `Ensure ${videoSrc} exists. ` +
-        "Keeping CSS animation fallback."
-    );
-  }, []);
-
-  useEffect(() => {
-    if (prefersReducedMotion && videoRef.current) {
-      // Pause video when reduced motion is preferred
-      videoRef.current.pause();
-    }
-  }, [prefersReducedMotion]);
+  const handleLoad = useCallback(() => setLoaded(true), []);
 
   return (
     <div
       className={`relative overflow-hidden rounded-3xl border border-[var(--va-border)] bg-[var(--va-panel)] shadow-2xl shadow-black/40 ${className}`}
     >
-      {/* DribbbleAnimation fallback — visible while video loads or on error */}
-      <motion.div
-        className="absolute inset-0"
-        initial={{ opacity: 1 }}
-        animate={{ opacity: showFallback && (videoError || !videoReady) ? 1 : 0 }}
-        transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-        style={{ pointerEvents: "none" }}
-      >
-        <DribbbleAnimation className="h-full w-full" />
-      </motion.div>
+      {/* Gradient placeholder — fades out once video loads */}
+      <div
+        className={`pointer-events-none absolute inset-0 bg-gradient-to-br from-[var(--va-elevated)] via-[var(--va-panel)] to-[var(--va-base)] transition-opacity duration-700 ${
+          loaded ? "opacity-0" : "opacity-100"
+        }`}
+      />
 
-      {/* Actual video — fades in once ready */}
-      <motion.div
-        className="absolute inset-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: videoReady && !videoError && !prefersReducedMotion ? 1 : 0 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+      {/* Video — fades in once loaded */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        className={`h-full w-full object-contain transition-opacity duration-700 ${
+          loaded ? "opacity-100" : "opacity-0"
+        }`}
+        onCanPlay={handleLoad}
+        onLoadedData={handleLoad}
+        onError={() => console.warn("[HeroVideoLayer] Video failed to load")}
+        aria-hidden="true"
       >
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          className="h-full w-full object-contain"
-          onCanPlay={handleCanPlay}
-          onLoadedData={handleCanPlay}
-          onError={handleError}
-          aria-hidden="true"
-        >
-          <source src={videoSrc} type="video/mp4" />
-        </video>
-      </motion.div>
+        <source src={videoSrc} type="video/mp4" />
+      </video>
 
-      {/* Subtle inner glow overlay to blend video with the dark theme */}
-      <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-b from-transparent via-transparent to-[var(--va-base)]/40" />
+      {/* Subtle bottom gradient to blend video with the dark theme */}
+      <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-b from-transparent via-transparent to-[var(--va-base)]/30" />
 
       {/* Edge ring */}
       <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-[var(--va-magenta)]/15" />
