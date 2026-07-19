@@ -5,5 +5,6 @@ import tailwindcss from "@tailwindcss/vite";
 // Vite handles the React development/build pipeline.
 // Tailwind v4 is connected through its official Vite plugin.
 export default defineConfig({
+  base: "/launchloom--ai/",
   plugins: [react(), tailwindcss()],
 });
