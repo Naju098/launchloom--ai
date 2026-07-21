@@ -20,6 +20,15 @@ const fields = [
   { key: "mainPromise", label: "Main promise", icon: ShieldCheck, placeholder: "Your strongest customer promise" },
 ];
 
+const fieldVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: (delay) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, delay, ease: [0.25, 0.1, 0.25, 1] },
+  }),
+};
+
 export default function IdeaForm({ onGenerate, loading }) {
   const [formData, setFormData] = useState(initialValues);
 
@@ -35,7 +44,6 @@ export default function IdeaForm({ onGenerate, loading }) {
 
   return (
     <section id="brand-builder" className="mx-auto max-w-7xl px-5 py-16 lg:px-8">
-      {/* Section heading */}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -43,11 +51,17 @@ export default function IdeaForm({ onGenerate, loading }) {
         transition={{ duration: 0.5 }}
         className="mx-auto max-w-2xl text-center"
       >
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--va-green)]">
+        <motion.p
+          initial={{ opacity: 0, y: -6 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.05 }}
+          className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--va-green)]"
+        >
           Mission setup
-        </p>
+        </motion.p>
         <h2 className="mt-3 text-3xl font-black tracking-[-0.03em] text-[var(--va-text)] sm:text-4xl">
-          Set up your business mission
+          Set up your <span className="text-gradient-magenta">business mission</span>
         </h2>
         <p className="mt-3 text-base leading-7 text-[var(--va-text-secondary)]">
           Step 1 of 1 — Business details. The form is prefilled with the Kochi demo. Edit any field to customise.
@@ -63,10 +77,18 @@ export default function IdeaForm({ onGenerate, loading }) {
         className="mt-9 rounded-2xl border border-[var(--va-border)] bg-[var(--va-panel)] p-6 shadow-2xl shadow-black/20 sm:p-8"
       >
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {fields.map((field) => {
+          {fields.map((field, i) => {
             const Icon = field.icon;
             return (
-              <label key={field.key} className="block">
+              <motion.label
+                key={field.key}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                custom={i * 0.05}
+                variants={fieldVariants}
+                className="block"
+              >
                 <span className="mb-2 flex items-center gap-2 text-sm font-bold text-[var(--va-text)]">
                   <Icon className="h-3.5 w-3.5 text-[var(--va-green)]" />
                   {field.label}
@@ -77,30 +99,41 @@ export default function IdeaForm({ onGenerate, loading }) {
                   value={formData[field.key]}
                   onChange={handleChange}
                   placeholder={field.placeholder}
-                  className="w-full rounded-xl border border-[var(--va-input-border)] bg-[var(--va-input)] px-4 py-3.5 text-sm text-[var(--va-text)] outline-none transition-all duration-200 placeholder:text-[var(--va-text-muted)] focus:border-[var(--va-green)] focus:ring-4 focus:ring-[var(--va-input-focus)]"
+                  className="w-full rounded-xl border border-[var(--va-input-border)] bg-[var(--va-input)] px-4 py-3.5 text-sm text-[var(--va-text)] outline-none transition-all duration-200 placeholder:text-[var(--va-text-muted)] focus:border-[var(--va-green)] focus:ring-4 focus:ring-[var(--va-input-focus)] focus:scale-[1.01]"
                 />
-              </label>
+              </motion.label>
             );
           })}
         </div>
 
         <div className="mt-7 flex flex-col items-start justify-between gap-5 border-t border-[var(--va-border)] pt-6 sm:flex-row sm:items-center">
-          <div className="flex items-start gap-3 text-sm text-[var(--va-text-muted)]">
-            <div className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-[var(--va-green-dim)] text-[var(--va-green)]">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="flex items-start gap-3 text-sm text-[var(--va-text-muted)]"
+          >
+            <motion.div
+              className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-[var(--va-green-dim)] text-[var(--va-green)]"
+              animate={{ rotate: [0, 5, -5, 0] }}
+              transition={{ duration: 4, repeat: Infinity }}
+            >
               <Rocket className="h-4 w-4" />
-            </div>
+            </motion.div>
             <p className="max-w-xl leading-6">
               Demo mode uses structured dummy output. Connect your AI backend for live generation.
             </p>
-          </div>
+          </motion.div>
 
           <motion.button
             type="submit"
             disabled={loading}
-            whileHover={loading ? {} : { scale: 1.02 }}
-            whileTap={loading ? {} : { scale: 0.98 }}
-            className="inline-flex min-w-52 items-center justify-center gap-2 rounded-xl bg-[var(--va-green)] px-5 py-3.5 text-sm font-black text-[var(--va-base)] shadow-lg shadow-[var(--va-green)]/20 transition-all duration-200 hover:brightness-110 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+            whileHover={loading ? {} : { scale: 1.03 }}
+            whileTap={loading ? {} : { scale: 0.97 }}
+            className="group relative inline-flex min-w-52 items-center justify-center gap-2 overflow-hidden rounded-xl bg-[var(--va-green)] px-5 py-3.5 text-sm font-black text-[var(--va-base)] shadow-lg shadow-[var(--va-green)]/20 transition-all duration-200 hover:brightness-110 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
           >
+            <span className="pointer-events-none absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
             {loading ? (
               <>
                 <LoaderCircle className="h-4 w-4 animate-spin" />
@@ -109,7 +142,12 @@ export default function IdeaForm({ onGenerate, loading }) {
             ) : (
               <>
                 Generate my launch world
-                <ArrowRight className="h-4 w-4" />
+                <motion.span
+                  animate={{ x: [0, 3, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <ArrowRight className="h-4 w-4" />
+                </motion.span>
               </>
             )}
           </motion.button>

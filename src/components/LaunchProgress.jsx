@@ -77,16 +77,19 @@ const levels = [
 export default function LaunchProgress({ currentLevel = 1, className = "" }) {
   return (
     <div className={`space-y-2 ${className}`}>
-      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--va-text-muted)]">
+      <motion.p
+        className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--va-text-muted)]"
+        animate={{ opacity: [0.6, 1, 0.6] }}
+        transition={{ duration: 3, repeat: Infinity }}
+      >
         Launch progress
-      </p>
+      </motion.p>
       <div className="space-y-1.5">
         {levels.map((level, i) => {
           const Icon = level.icon;
           const isCompleted = i + 1 < currentLevel;
           const isActive = i + 1 === currentLevel;
           const isLocked = i + 1 > currentLevel;
-          const StatusIcon = isCompleted ? CheckCircle2 : isActive ? Play : Lock;
 
           return (
             <motion.div
@@ -94,15 +97,18 @@ export default function LaunchProgress({ currentLevel = 1, className = "" }) {
               initial={false}
               animate={{
                 opacity: isLocked ? 0.4 : 1,
+                x: isActive ? [0, 2, 0] : 0,
               }}
+              transition={isActive ? { duration: 2, repeat: Infinity } : {}}
+              whileHover={!isLocked ? { x: 2 } : {}}
               className={`flex items-center gap-2.5 rounded-lg border px-3 py-2 transition-all ${
                 isActive
                   ? `${level.border} ${level.bg}`
                   : "border-transparent"
               }`}
             >
-              {/* Icon */}
-              <div
+              {/* Icon with animation */}
+              <motion.div
                 className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg ${
                   isCompleted
                     ? "bg-[var(--va-green)]/15 text-[var(--va-green)]"
@@ -110,13 +116,15 @@ export default function LaunchProgress({ currentLevel = 1, className = "" }) {
                       ? `${level.bg} ${level.accent}`
                       : "text-[var(--va-text-muted)]"
                 }`}
+                animate={isActive ? { scale: [1, 1.05, 1] } : {}}
+                transition={isActive ? { duration: 2, repeat: Infinity } : {}}
               >
                 {isCompleted ? (
                   <CheckCircle2 className="h-3.5 w-3.5" />
                 ) : (
                   <Icon className="h-3.5 w-3.5" />
                 )}
-              </div>
+              </motion.div>
 
               {/* Label */}
               <div className="flex-1 min-w-0">
@@ -135,14 +143,23 @@ export default function LaunchProgress({ currentLevel = 1, className = "" }) {
 
               {/* Status badge */}
               {isCompleted && (
-                <span className="text-[9px] font-bold text-[var(--va-green)]">
+                <motion.span
+                  className="text-[9px] font-bold text-[var(--va-green)]"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                >
                   Done
-                </span>
+                </motion.span>
               )}
               {isActive && (
-                <span className="text-[9px] font-bold text-[var(--va-green)]">
+                <motion.span
+                  className="text-[9px] font-bold text-[var(--va-green)]"
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
                   Active
-                </span>
+                </motion.span>
               )}
             </motion.div>
           );

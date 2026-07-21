@@ -25,20 +25,24 @@ export default function PinterestAssetBoard() {
         transition={{ duration: 0.5 }}
         className="mx-auto max-w-2xl text-center"
       >
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--va-green)]">
+        <motion.p
+          initial={{ opacity: 0, y: -6 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.3, delay: 0.05 }}
+          className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--va-green)]"
+        >
           Discovery board
-        </p>
+        </motion.p>
         <h2 className="mt-3 text-3xl font-black tracking-[-0.03em] text-[var(--va-text)] sm:text-4xl">
-          Everything your idea can become
+          Everything your idea can <span className="text-gradient-magenta">become</span>
         </h2>
         <p className="mt-3 text-base leading-7 text-[var(--va-text-secondary)]">
           A complete business system — not just a logo or a tagline.
         </p>
       </motion.div>
 
-      {/* Masonry-style grid */}
       <div className="mt-10 columns-1 gap-4 sm:columns-2 lg:columns-3 [&>*]:mb-4">
-        {/* Brand identity — tall */}
         <AssetCard
           icon={Palette}
           title="Brand identity"
@@ -48,22 +52,24 @@ export default function PinterestAssetBoard() {
           index={0}
           className="break-inside-avoid"
         >
-          <div className="rounded-xl bg-[var(--va-elevated)] p-4">
+          <div className="rounded-xl bg-[var(--va-elevated)] p-4 relative overflow-hidden group/card">
+            <span className="pointer-events-none absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent transition-transform duration-700 group-hover/card:translate-x-full" />
             <p className="text-lg font-black text-[var(--va-text)]">Reboot Kochi</p>
             <p className="mt-1 text-xs text-[var(--va-text-secondary)]">Reliable laptops. Smarter prices.</p>
             <div className="mt-3 flex gap-2">
               {palette.slice(0, 4).map((c) => (
-                <div
+                <motion.div
                   key={c.hex}
-                  className="h-6 w-6 rounded-lg shadow-inner"
+                  className="h-6 w-6 rounded-lg shadow-inner ring-1 ring-white/10 cursor-pointer"
                   style={{ backgroundColor: c.hex }}
+                  whileHover={{ scale: 1.4, rotate: 15 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 />
               ))}
             </div>
           </div>
         </AssetCard>
 
-        {/* Product — wide */}
         <AssetCard
           icon={Package}
           title="Product collection"
@@ -75,7 +81,11 @@ export default function PinterestAssetBoard() {
         >
           <div className="space-y-2">
             {catalogue.map((p) => (
-              <div key={p.id} className="flex items-center justify-between rounded-lg bg-[var(--va-elevated)] px-3 py-2">
+              <motion.div
+                key={p.id}
+                whileHover={{ x: 4, scale: 1.01 }}
+                className="flex items-center justify-between rounded-lg bg-[var(--va-elevated)] px-3 py-2 transition-all duration-200 hover:bg-[var(--va-amber)]/5"
+              >
                 <div>
                   <p className="text-xs font-bold text-[var(--va-text)]">{p.name}</p>
                   <p className="text-[10px] text-[var(--va-text-muted)]">{p.specs}</p>
@@ -84,12 +94,11 @@ export default function PinterestAssetBoard() {
                   <p className="text-xs font-bold text-[var(--va-green)]">{p.score}%</p>
                   <p className="text-[10px] text-[var(--va-text-muted)]">{p.price}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </AssetCard>
 
-        {/* Website sections */}
         <AssetCard
           icon={LayoutTemplate}
           title="Website sections"
@@ -101,14 +110,17 @@ export default function PinterestAssetBoard() {
         >
           <div className="grid grid-cols-2 gap-1.5">
             {["Hero", "Trust", "Products", "Reviews", "Warranty", "Contact", "CTA"].map((s) => (
-              <div key={s} className="rounded-md bg-[var(--va-elevated)] px-2.5 py-2 text-center text-[10px] font-semibold text-[var(--va-text-secondary)]">
+              <motion.div
+                key={s}
+                whileHover={{ scale: 1.05, y: -1 }}
+                className="rounded-md bg-[var(--va-elevated)] px-2.5 py-2 text-center text-[10px] font-semibold text-[var(--va-text-secondary)] transition-all duration-200 hover:bg-[var(--va-coral)]/10 hover:text-[var(--va-coral)]"
+              >
                 {s}
-              </div>
+              </motion.div>
             ))}
           </div>
         </AssetCard>
 
-        {/* Sales chatbot */}
         <AssetCard
           icon={Bot}
           title="Sales chatbot"
@@ -130,7 +142,6 @@ export default function PinterestAssetBoard() {
           </div>
         </AssetCard>
 
-        {/* WhatsApp follow-up */}
         <AssetCard
           icon={MessageCircleMore}
           title="WhatsApp follow-up"
@@ -142,15 +153,18 @@ export default function PinterestAssetBoard() {
         >
           <div className="space-y-2">
             {["Immediately", "After 1 day", "After 3 days"].map((t) => (
-              <div key={t} className="flex items-center gap-2 rounded-lg bg-[var(--va-elevated)] px-3 py-2">
+              <motion.div
+                key={t}
+                whileHover={{ x: 4 }}
+                className="flex items-center gap-2 rounded-lg bg-[var(--va-elevated)] px-3 py-2 transition-all duration-200 hover:bg-[var(--va-green-dim)]/30"
+              >
                 <CheckCircle2 className="h-3 w-3 shrink-0 text-[var(--va-green)]" />
                 <span className="text-[10px] text-[var(--va-text-secondary)]">{t}</span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </AssetCard>
 
-        {/* Customer enquiries */}
         <AssetCard
           icon={Users}
           title="Customer enquiries"
@@ -165,18 +179,21 @@ export default function PinterestAssetBoard() {
               { name: "Arjun", req: "Programming laptop", budget: "₹35,000" },
               { name: "Meera", req: "Remote work", budget: "₹25,000" },
             ].map((l) => (
-              <div key={l.name} className="flex items-center justify-between rounded-lg bg-[var(--va-elevated)] px-3 py-2">
+              <motion.div
+                key={l.name}
+                whileHover={{ x: 4 }}
+                className="flex items-center justify-between rounded-lg bg-[var(--va-elevated)] px-3 py-2 transition-all duration-200 hover:bg-[var(--va-amber)]/5"
+              >
                 <div>
                   <p className="text-xs font-bold text-[var(--va-text)]">{l.name}</p>
                   <p className="text-[10px] text-[var(--va-text-muted)]">{l.req}</p>
                 </div>
                 <span className="text-[10px] font-bold text-[var(--va-coral)]">{l.budget}</span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </AssetCard>
 
-        {/* Colour palette */}
         <AssetCard
           icon={Eye}
           title="Colour palette"
@@ -188,8 +205,13 @@ export default function PinterestAssetBoard() {
         >
           <div className="space-y-2">
             {palette.map((c) => (
-              <div key={c.hex} className="flex items-center gap-3">
-                <div className="h-6 w-6 rounded-lg shadow-inner" style={{ backgroundColor: c.hex }} />
+              <div key={c.hex} className="flex items-center gap-3 group">
+                <motion.div
+                  className="h-6 w-6 rounded-lg shadow-inner ring-1 ring-white/10 cursor-pointer"
+                  style={{ backgroundColor: c.hex }}
+                  whileHover={{ scale: 1.4, rotate: 15 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                />
                 <div>
                   <p className="text-xs font-semibold text-[var(--va-text)]">{c.name}</p>
                   <p className="text-[10px] text-[var(--va-text-muted)]">{c.hex}</p>
@@ -199,7 +221,6 @@ export default function PinterestAssetBoard() {
           </div>
         </AssetCard>
 
-        {/* Target customers */}
         <AssetCard
           icon={Target}
           title="Target customers"
@@ -211,14 +232,17 @@ export default function PinterestAssetBoard() {
         >
           <div className="space-y-2">
             {["College students", "Young professionals", "Startups & offices"].map((g) => (
-              <div key={g} className="rounded-lg bg-[var(--va-elevated)] px-3 py-2 text-xs text-[var(--va-text-secondary)]">
+              <motion.div
+                key={g}
+                whileHover={{ x: 4 }}
+                className="rounded-lg bg-[var(--va-elevated)] px-3 py-2 text-xs text-[var(--va-text-secondary)] transition-all duration-200 hover:bg-[var(--va-coral)]/5"
+              >
                 {g}
-              </div>
+              </motion.div>
             ))}
           </div>
         </AssetCard>
 
-        {/* Launch checklist */}
         <AssetCard
           icon={CheckCircle2}
           title="Launch checklist"
@@ -230,10 +254,14 @@ export default function PinterestAssetBoard() {
         >
           <div className="space-y-1.5">
             {["Business idea", "Brand identity", "Product catalogue", "Website structure", "Sales messages", "Customer system"].map((l) => (
-              <div key={l} className="flex items-center gap-2 text-xs">
-                <CheckCircle2 className="h-3 w-3 text-[var(--va-green)]" />
-                <span className="text-[var(--va-text-secondary)]">{l}</span>
-              </div>
+              <motion.div
+                key={l}
+                whileHover={{ x: 4 }}
+                className="flex items-center gap-2 text-xs group"
+              >
+                <CheckCircle2 className="h-3 w-3 text-[var(--va-green)] transition-all duration-200 group-hover:scale-125" />
+                <span className="text-[var(--va-text-secondary)] transition-all duration-200 group-hover:text-[var(--va-text)]">{l}</span>
+              </motion.div>
             ))}
           </div>
         </AssetCard>

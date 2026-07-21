@@ -16,8 +16,8 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] } },
+  hidden: { opacity: 0, y: 16, scale: 0.97 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] } },
 };
 
 export default function WhoIsThisFor() {
@@ -31,11 +31,17 @@ export default function WhoIsThisFor() {
           transition={{ duration: 0.5 }}
           className="mx-auto max-w-2xl text-center"
         >
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--va-green)]">
+          <motion.p
+            initial={{ opacity: 0, y: -6 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.3, delay: 0.05 }}
+            className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--va-green)]"
+          >
             Who is this for
-          </p>
+          </motion.p>
           <h2 className="mt-3 text-3xl font-black tracking-[-0.03em] text-[var(--va-text)] sm:text-4xl">
-            Built for people starting and growing real businesses
+            Built for people starting and growing <span className="text-gradient-magenta">real businesses</span>
           </h2>
           <p className="mt-3 text-base leading-7 text-[var(--va-text-secondary)]">
             No technical or design experience needed. Just describe your business and LaunchLoom does the rest.
@@ -53,13 +59,20 @@ export default function WhoIsThisFor() {
             <motion.article
               key={title}
               variants={cardVariants}
-              whileHover={{ y: -3 }}
-              className="venture-card rounded-2xl p-6"
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="border-glow venture-card group relative overflow-hidden rounded-2xl p-6"
             >
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--va-green-dim)] text-[var(--va-green)]">
+              <span className="pointer-events-none absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+              <motion.div
+                className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--va-green-dim)] text-[var(--va-green)] transition-all duration-300"
+                whileHover={{ scale: 1.15, rotate: [0, -10, 10, 0] }}
+                transition={{ duration: 0.3 }}
+              >
                 <Icon className="h-5 w-5" />
-              </div>
-              <h3 className="mt-4 font-bold text-[var(--va-text)]">{title}</h3>
+              </motion.div>
+              <h3 className="mt-4 font-bold text-[var(--va-text)] group-hover:text-gradient-magenta transition-all duration-300">
+                {title}
+              </h3>
               <p className="mt-2 text-sm leading-6 text-[var(--va-text-secondary)]">{description}</p>
             </motion.article>
           ))}

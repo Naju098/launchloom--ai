@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import BrandLogo from "./BrandLogo";
 
 const productLinks = [
@@ -21,13 +22,70 @@ const company = [
   { label: "Demo disclaimer", href: "#" },
 ];
 
+function FooterLink({ href, children }) {
+  return (
+    <li>
+      <motion.a
+        href={href}
+        whileHover={{ x: 4 }}
+        className="relative inline-block text-sm font-medium text-[var(--loom-lilac)] transition-all duration-200 hover:text-white"
+      >
+        <span className="relative">
+          {children}
+          <motion.span
+            className="absolute -bottom-0.5 left-0 h-px bg-white"
+            initial={{ width: "0%" }}
+            whileHover={{ width: "100%" }}
+            transition={{ duration: 0.2 }}
+          />
+        </span>
+      </motion.a>
+    </li>
+  );
+}
+
+function FooterColumn({ title, links }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4 }}
+    >
+      <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--loom-lilac)]/60">
+        {title}
+      </p>
+      <ul className="mt-4 space-y-2.5">
+        {links.map((link, i) => (
+          <motion.li
+            key={link.label}
+            initial={{ opacity: 0, x: -6 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.04 }}
+          >
+            <FooterLink href={link.href}>{link.label}</FooterLink>
+          </motion.li>
+        ))}
+      </ul>
+    </motion.div>
+  );
+}
+
 export default function Footer() {
   return (
     <footer className="border-t border-white/10 bg-[#2B2430]">
+      <div className="section-divider-glow" />
+
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="grid gap-8 py-12 sm:grid-cols-2 md:grid-cols-4">
-          {/* Brand column */}
-          <div className="sm:col-span-2 md:col-span-1">
+          <motion.div
+            className="sm:col-span-2 md:col-span-1"
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+          >
             <BrandLogo />
             <p className="mt-4 text-sm leading-6 text-[var(--loom-lilac)]">
               LaunchLoom AI transforms raw business ideas into launch-ready brand
@@ -38,73 +96,28 @@ export default function Footer() {
               <br />
               Connect your AI backend for live generation.
             </p>
-          </div>
+          </motion.div>
 
-          {/* Product */}
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--loom-lilac)]/60">
-              Product
-            </p>
-            <ul className="mt-4 space-y-2.5">
-              {productLinks.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm font-medium text-[var(--loom-lilac)] transition hover:text-[var(--loom-pink)]"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Resources */}
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--loom-lilac)]/60">
-              Resources
-            </p>
-            <ul className="mt-4 space-y-2.5">
-              {resources.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm font-medium text-[var(--loom-lilac)] transition hover:text-[var(--loom-pink)]"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--loom-lilac)]/60">
-              Company
-            </p>
-            <ul className="mt-4 space-y-2.5">
-              {company.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm font-medium text-[var(--loom-lilac)] transition hover:text-[var(--loom-pink)]"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <FooterColumn title="Product" links={productLinks} />
+          <FooterColumn title="Resources" links={resources} />
+          <FooterColumn title="Company" links={company} />
         </div>
 
-        {/* Bottom bar */}
-        <div className="flex flex-col items-center justify-between border-t border-white/10 py-6 text-xs text-[var(--loom-lilac)]/60 sm:flex-row">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="flex flex-col items-center justify-between border-t border-white/10 py-6 text-xs text-[var(--loom-lilac)]/60 sm:flex-row"
+        >
           <p>&copy; {new Date().getFullYear()} LaunchLoom AI. Demo application.</p>
-          <p className="mt-2 sm:mt-0">
+          <motion.p
+            className="mt-2 sm:mt-0"
+            whileHover={{ color: "rgba(255,255,255,0.6)" }}
+          >
             Built with React, Tailwind CSS, and Motion.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
       </div>
     </footer>
   );

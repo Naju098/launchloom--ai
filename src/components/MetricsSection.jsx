@@ -11,11 +11,15 @@ const metrics = [
 function AnimatedMetric({ value, suffix, label, desc, accent }) {
   const count = useCountUp(value);
   return (
-    <div className="text-center">
-      <p className={`text-5xl font-black ${accent} sm:text-6xl`}>
+    <div className="text-center group">
+      <motion.p
+        className={`text-5xl font-black ${accent} sm:text-6xl transition-all duration-300`}
+        whileHover={{ scale: 1.08, rotate: [0, -2, 2, 0] }}
+        transition={{ duration: 0.3 }}
+      >
         {count}
         {suffix && <span className="text-3xl font-bold sm:text-4xl">{suffix}</span>}
-      </p>
+      </motion.p>
       <p className="mt-2 text-base font-bold text-[var(--va-text)]">{label}</p>
       <p className="mt-1 text-sm text-[var(--va-text-muted)]">{desc}</p>
     </div>
@@ -33,11 +37,17 @@ export default function MetricsSection() {
           transition={{ duration: 0.5 }}
           className="mx-auto max-w-2xl text-center"
         >
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--va-green)]">
+          <motion.p
+            initial={{ opacity: 0, y: -6 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.3, delay: 0.05 }}
+            className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--va-green)]"
+          >
             Product metrics
-          </p>
+          </motion.p>
           <h2 className="mt-3 text-3xl font-black tracking-[-0.03em] text-[var(--va-text)] sm:text-4xl">
-            What LaunchLoom delivers
+            What <span className="text-gradient-magenta">LaunchLoom</span> delivers
           </h2>
           <p className="mt-3 text-base leading-7 text-[var(--va-text-secondary)]">
             Workflow indicators from the demo — connect your data source for real-time metrics.
@@ -48,12 +58,23 @@ export default function MetricsSection() {
           {metrics.map((metric, i) => (
             <motion.div
               key={metric.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.5, delay: i * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="border-glow venture-card rounded-2xl p-6"
             >
               <AnimatedMetric {...metric} />
+              {/* Animated underline bar */}
+              <motion.div
+                className="mx-auto mt-4 h-0.5 rounded-full"
+                style={{ background: `var(--va-magenta)` }}
+                initial={{ width: "0%", opacity: 0 }}
+                whileInView={{ width: "60%", opacity: 0.3 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: i * 0.1 + 0.3, ease: "easeOut" }}
+              />
             </motion.div>
           ))}
         </div>

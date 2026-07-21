@@ -18,6 +18,7 @@ import IdeaForm from "./components/IdeaForm";
 import LeadDashboard from "./components/LeadDashboard";
 import GuidedDemo from "./components/demo/GuidedDemo";
 import ScrollProgress from "./components/ScrollProgress";
+import CursorFollower from "./components/CursorFollower";
 import { VentureModeProvider } from "./context/VentureModeContext";
 import { ToastProvider, useToast } from "./components/venture/AchievementToast";
 import { generateBrandPackage } from "./services/aiService";
@@ -94,6 +95,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-[var(--va-base)] text-[var(--va-text)]">
+      <CursorFollower />
       <ScrollProgress />
       <VentureHeader
         currentView={currentView}

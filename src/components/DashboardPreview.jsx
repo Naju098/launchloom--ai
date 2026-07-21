@@ -14,6 +14,49 @@ const sampleLeads = [
   { name: "Rahul Verma", phone: "+91 99887 76655", useCase: "Graphic design", budget: "₹40,000", score: "Hot", status: "Qualified" },
 ];
 
+function StatCard({ label, value, icon: Icon, accent, bg, delay = 0 }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay, duration: 0.4 }}
+      whileHover={{ y: -6, scale: 1.02 }}
+      className="border-glow venture-card rounded-xl p-4 group"
+    >
+      <div className="flex items-center justify-between">
+        <motion.div
+          className={`grid h-9 w-9 place-items-center rounded-xl ${bg} ${accent}`}
+          whileHover={{ rotate: [0, -10, 10, 0] }}
+          transition={{ duration: 0.3 }}
+        >
+          <Icon className="h-4 w-4" />
+        </motion.div>
+        <motion.span
+          className={`text-xs font-bold ${accent}`}
+          animate={{ opacity: [0.7, 1, 0.7] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          Live
+        </motion.span>
+      </div>
+      <p className="mt-4 text-2xl font-black text-[var(--va-text)] group-hover:text-gradient-magenta transition-all duration-300">
+        {value}
+      </p>
+      <p className="mt-0.5 text-xs font-semibold text-[var(--va-text-muted)]">{label}</p>
+    </motion.div>
+  );
+}
+
+const rowVariants = {
+  hidden: { opacity: 0, x: -6 },
+  visible: (delay) => ({
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.3, delay },
+  }),
+};
+
 export default function DashboardPreview() {
   return (
     <section id="leads-preview" className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
@@ -24,11 +67,17 @@ export default function DashboardPreview() {
         transition={{ duration: 0.5 }}
         className="mx-auto max-w-2xl text-center"
       >
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--va-green)]">
+        <motion.p
+          initial={{ opacity: 0, y: -6 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.05 }}
+          className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--va-green)]"
+        >
           Lead dashboard
-        </p>
+        </motion.p>
         <h2 className="mt-3 text-3xl font-black tracking-[-0.03em] text-[var(--va-text)] sm:text-4xl">
-          Every lead, organised and actionable
+          Every lead, <span className="text-gradient-magenta">organised</span> and actionable
         </h2>
         <p className="mt-3 text-base leading-7 text-[var(--va-text-secondary)]">
           Captured leads are automatically scored, categorised, and ready for follow-up.
@@ -36,25 +85,8 @@ export default function DashboardPreview() {
       </motion.div>
 
       <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map(({ label, value, icon: Icon, accent, bg }, i) => (
-          <motion.div
-            key={label}
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.06, duration: 0.4 }}
-            whileHover={{ y: -3 }}
-            className="venture-card rounded-xl p-4"
-          >
-            <div className="flex items-center justify-between">
-              <div className={`grid h-9 w-9 place-items-center rounded-xl ${bg} ${accent}`}>
-                <Icon className="h-4 w-4" />
-              </div>
-              <span className={`text-xs font-bold ${accent}`}>Live</span>
-            </div>
-            <p className="mt-4 text-2xl font-black text-[var(--va-text)]">{value}</p>
-            <p className="mt-0.5 text-xs font-semibold text-[var(--va-text-muted)]">{label}</p>
-          </motion.div>
+        {stats.map((stat, i) => (
+          <StatCard key={stat.label} {...stat} delay={i * 0.06} />
         ))}
       </div>
 
@@ -63,17 +95,19 @@ export default function DashboardPreview() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        className="mt-6 overflow-hidden rounded-xl border border-[var(--va-border)] bg-[var(--va-card)] shadow-sm"
+        whileHover={{ y: -2 }}
+        className="mt-6 overflow-hidden rounded-xl border border-[var(--va-border)] bg-[var(--va-card)] shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-black/20"
       >
         <div className="flex items-center justify-between border-b border-[var(--va-border)] bg-[var(--va-elevated)] px-5 py-3.5">
           <p className="text-sm font-bold text-[var(--va-text)]">Recent enquiries</p>
-          <a
+          <motion.a
             href="#leads"
-            className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--va-green)] hover:text-[var(--va-green)]"
+            whileHover={{ gap: "0.5rem" }}
+            className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--va-green)] transition-all hover:gap-1.5"
           >
             View full dashboard
             <ArrowUpRight className="h-3 w-3" />
-          </a>
+          </motion.a>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[580px] text-left text-sm">
@@ -90,11 +124,13 @@ export default function DashboardPreview() {
               {sampleLeads.map((lead, i) => (
                 <motion.tr
                   key={lead.name}
-                  initial={{ opacity: 0, x: -6 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial="hidden"
+                  whileInView="visible"
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
-                  className="text-[var(--va-text-secondary)] transition-colors hover:bg-[var(--va-elevated)]"
+                  custom={i * 0.05}
+                  variants={rowVariants}
+                  whileHover={{ backgroundColor: "rgba(255,255,255,0.02)" }}
+                  className="text-[var(--va-text-secondary)] transition-colors"
                 >
                   <td className="px-5 py-3.5">
                     <p className="font-semibold text-[var(--va-text)]">{lead.name}</p>
@@ -105,27 +141,30 @@ export default function DashboardPreview() {
                     <p className="text-xs text-[var(--va-text-muted)]">{lead.budget}</p>
                   </td>
                   <td className="px-4 py-3.5">
-                    <span
-                      className={`rounded-lg px-2 py-0.5 text-xs font-bold ${
+                    <motion.span
+                      whileHover={{ scale: 1.05 }}
+                      className={`inline-block rounded-lg px-2 py-0.5 text-xs font-bold ${
                         lead.score === "Hot"
                           ? "bg-[var(--va-coral)]/20 text-[var(--va-coral)]"
                           : "bg-[var(--va-amber)]/10 text-[var(--va-amber)]"
                       }`}
                     >
                       {lead.score}
-                    </span>
+                    </motion.span>
                   </td>
                   <td className="px-4 py-3.5 text-xs font-semibold text-[var(--va-text-muted)]">
                     {lead.status}
                   </td>
                   <td className="px-5 py-3.5">
-                    <button
+                    <motion.button
                       type="button"
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--va-green-dim)] px-2.5 py-1.5 text-xs font-bold text-[var(--va-green)]"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--va-green-dim)] px-2.5 py-1.5 text-xs font-bold text-[var(--va-green)] transition-all hover:bg-[var(--va-green)] hover:text-[var(--va-base)]"
                     >
                       <MessageCircle className="h-3 w-3" />
                       WhatsApp
-                    </button>
+                    </motion.button>
                   </td>
                 </motion.tr>
               ))}
